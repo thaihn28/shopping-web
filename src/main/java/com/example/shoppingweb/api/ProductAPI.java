@@ -1,5 +1,7 @@
 package com.example.shoppingweb.api;
 
+import com.example.shoppingweb.dto.ProductDTO;
+import com.example.shoppingweb.model.Category;
 import com.example.shoppingweb.model.Product;
 import com.example.shoppingweb.repository.CategoryRepository;
 import com.example.shoppingweb.repository.ProductRepository;
@@ -10,8 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +60,19 @@ public class ProductAPI {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/products/add")
+    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) throws IOException, UserNotFoundException {
+        Product product = new Product();
+        product.setProductId(productDTO.getProductId());
+        product.setName(productDTO.getName());
+        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
+        product.setPrice(productDTO.getPrice());
+        product.setQuantity(productDTO.getQuantity());
+        product.setDescription(productDTO.getDescription());
+        product.setImageName(productDTO.getImageName());
+        productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO());
+    }
 
     @GetMapping("/product/{id}")
     public Product productById(@PathVariable(value = "id") Long id){
@@ -65,5 +87,11 @@ public class ProductAPI {
     @GetMapping("/categories/{id}")
     public List<Product> getProductByCategory(@PathVariable("id") int id){
         return productRepository.findAllByCategoryId(id);
+    }
+
+    // categories
+    @GetMapping("/categories")
+    public List<Category> getAllCategories(){
+        return categoryService.getAllCategory();
     }
 }
