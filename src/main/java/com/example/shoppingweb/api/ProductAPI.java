@@ -60,18 +60,21 @@ public class ProductAPI {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/products/add")
+    @PostMapping("/add-product")
     public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) throws IOException, UserNotFoundException {
         Product product = new Product();
+
         product.setProductId(productDTO.getProductId());
         product.setName(productDTO.getName());
-        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
         product.setDescription(productDTO.getDescription());
         product.setImageName(productDTO.getImageName());
+        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
+
         productService.addProduct(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO());
+
+        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
 
     @GetMapping("/product/{id}")
