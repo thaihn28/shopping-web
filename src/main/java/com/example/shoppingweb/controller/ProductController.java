@@ -36,10 +36,10 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllPages(Model model){
-//        model.addAttribute("products", productService.getAllProduct());
-//        return "/product/products";
+        model.addAttribute("products", productService.getAllProduct());
+        return "/product/products";
 //        Pagination
-        return getOnePage(model, 1);
+//        return getOnePage(model, 1);
     }
 
     // Pagination
