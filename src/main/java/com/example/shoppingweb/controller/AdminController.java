@@ -24,4 +24,10 @@ public class AdminController {
         model.addAttribute("categories", categoryService.getAllCategory());
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
 }
