@@ -37,9 +37,9 @@ public class ProductController {
     @GetMapping("/products")
     public String getAllPages(Model model){
         model.addAttribute("products", productService.getAllProduct());
-        return "/product/products";
+//        return "/product/products";
 //        Pagination
-//        return getOnePage(model, 1);
+        return getOnePage(model, 1);
     }
 
     // Pagination
@@ -130,7 +130,7 @@ public class ProductController {
         }else{
             imageUUID = imgName;
         }
-        product.setImageName(imageUUID);
+        product.setImageName("http://localhost:8080/productImages/" + imageUUID);
         productService.addProduct(product);
         model.addAttribute("categories", categoryService.getAllCategory());
         return "redirect:/admin/products";

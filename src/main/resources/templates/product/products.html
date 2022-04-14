@@ -69,7 +69,7 @@
                         <td th:text="${product.productId}"></td>
                         <td th:text="${product.name}"></td>
                         <td th:text="${product.category.name}"></td>
-                        <td><img src="" height="100px" width="100px"  th:src="@{${'/productImages/' + product.imageName}}"></td>
+                        <td><img src="" height="100px" width="100px"  th:src="${product.imageName}"></td>
                         <!--            Show dialog to delete-->
                         <td>
                             <a th:data-id="${product.productId}"

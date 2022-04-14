@@ -60,8 +60,8 @@ public class ProductAPI {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/add-product")
-    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) throws IOException, UserNotFoundException {
+    @PostMapping("/product/add")
+    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO) throws IOException, UserNotFoundException {
         Product product = new Product();
 
         product.setProductId(productDTO.getProductId());
@@ -74,11 +74,31 @@ public class ProductAPI {
 
         productService.addProduct(product);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+        return productDTO;
+    }
+    @PutMapping("/product/update/{id}")
+    public ProductDTO updateProduct(@RequestBody ProductDTO productDTO, @PathVariable(value = "id") Long id) throws IOException, UserNotFoundException {
+        productDTO = new ProductDTO();
+        if(productRepository.existsById(id)){
+            Product product = productService.getProductById(id);
+
+            productDTO.setProductId(product.getProductId());
+            productDTO.setName(product.getName());
+            productDTO.setCategoryId(product.getCategory().getId());
+            productDTO.setPrice(product.getPrice());
+            productDTO.setQuantity(product.getQuantity());
+            productDTO.setDescription(product.getDescription());
+            productDTO.setImageName(product.getImageName());
+
+            productService.addProduct(product);
+            return productDTO;
+        }else {
+            return null;
+        }
     }
 
     @GetMapping("/product/{id}")
-    public Product productById(@PathVariable(value = "id") Long id){
+    public Product getOneProduct(@PathVariable(value = "id") Long id){
         try {
             return productService.getProductById(id);
         } catch (UserNotFoundException e) {
@@ -86,15 +106,11 @@ public class ProductAPI {
             return null;
         }
     }
-    // categories
-    @GetMapping("/categories/{id}")
-    public List<Product> getProductByCategory(@PathVariable("id") int id){
-        return productRepository.findAllByCategoryId(id);
-    }
 
-    // categories
-    @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return categoryService.getAllCategory();
+    @DeleteMapping("product/delete/{id}")
+    public void deleteProduct(@PathVariable(value = "id") Long id) {
+        if (productRepository.existsById(id)) {
+            productService.deleteProductById(id);
+        }
     }
 }
