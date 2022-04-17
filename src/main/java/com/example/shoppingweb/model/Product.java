@@ -1,9 +1,11 @@
 package com.example.shoppingweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,6 +18,7 @@ public class Product {
 
     @ManyToOne
     private Category category;
+
 
     @NotNull
     @Column
@@ -33,5 +36,9 @@ public class Product {
     @Column
     private int quantity;
     private String imageName;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<OrderDetail> orderDetails;
 
 }

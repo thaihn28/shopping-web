@@ -1,4 +1,4 @@
-package com.example.shoppingweb.config;
+package com.example.shoppingweb.config.jwtconfig;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.example.shoppingweb.config;
+package com.example.shoppingweb.config.jwtconfig;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.example.shoppingweb.service.UserDetailsServiceImp;
+import com.example.shoppingweb.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +28,7 @@ class gets executed. It checks if the request has a valid JWT token. If it has a
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private UserDetailsServiceImp userDetailsServiceImp;
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -59,7 +59,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.userDetailsServiceImp.loadUserByUsername(username);
+            UserDetails userDetails = this.userServiceImpl.loadUserByUsername(username);
 
             // if token is valid configure Spring Security to manually set
             // authentication

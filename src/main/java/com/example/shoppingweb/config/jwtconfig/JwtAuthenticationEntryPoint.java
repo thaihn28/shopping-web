@@ -1,4 +1,4 @@
-package com.example.shoppingweb.config;
+package com.example.shoppingweb.config.jwtconfig;
 
 import java.io.IOException;
 import java.io.Serializable;

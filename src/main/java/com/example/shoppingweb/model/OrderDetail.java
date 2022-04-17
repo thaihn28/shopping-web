@@ -5,19 +5,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
-
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-public class Cart {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private User user;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ProductDetail> productDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private int quantity;
+
 }

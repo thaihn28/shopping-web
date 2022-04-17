@@ -53,19 +53,30 @@
 
 <body>
 <!-- container section start -->
+
 <section id="container" class="">
     <header class="header dark-bg">
+        <div sec:authorize="isAuthenticated()">
         <div class="toggle-nav">
             <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+        </div>
         </div>
 
         <!--logo start-->
         <a th:href="@{/admin}" class="logo"> <span class="lite">Admin</span></a>
         <!--logo end-->
-        <a th:href="@{/logout}" style="margin-left: 70px" class="logo">Logout</a>
 
-        <div class="nav search-row" id="top_menu">
 
+<!--        <div class="nav search-row" id="top_menu">-->
+
+<!--        </div>-->
+<!--        <p>Welcome: </p>-->
+<!--        <div sec:authentication="name"></div>-->
+
+        <div class="top-nav notification-row">
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/logout}" class="logo">Logout</a>
+        </div>
         </div>
 <!--        <div class="top-nav notification-row">-->
 <!--            <ul class="nav pull-right top-menu">-->
@@ -94,6 +105,7 @@
     <!--header end-->
 
     <!--sidebar start-->
+    <div sec:authorize="isAuthenticated()">
     <aside>
         <div id="sidebar" class="nav-collapse" >
             <!-- sidebar menu start-->
@@ -117,11 +129,19 @@
                     </a>
                 </li>
                 <li class="sub-menu">
-                    <a href="javascript:;" class="" th:href="@{/admin/carts}">
+                    <a href="javascript:;" class="" th:href="@{/order/view-orders}">
                         <i class="fa fa-folder"></i>
                         <span>Orders</span>
                     </a>
                 </li>
+                <div sec:authorize="hasRole('ADMIN')">
+                <li class="sub-menu">
+                    <a href="javascript:;" class="" th:href="@{/registration}">
+                        <i class="fa fa-folder"></i>
+                        <span>Register a new staff</span>
+                    </a>
+                </li>
+                </div>
 <!--                <li class="sub-menu">-->
 <!--                    <a href="javascript:;" class="" th:href="@{admin/registrationAdmin}">-->
 <!--                        <i class="fa fa-sign-in"></i>-->
@@ -133,6 +153,7 @@
             <!-- sidebar menu end-->
         </div>
     </aside>
+    </div>
     <!--sidebar end-->
 
     <!--main content start-->

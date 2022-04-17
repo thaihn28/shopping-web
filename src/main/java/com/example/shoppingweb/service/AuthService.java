@@ -1,14 +1,13 @@
 package com.example.shoppingweb.service;
 
-import com.example.shoppingweb.config.JwtTokenUtil;
+import com.example.shoppingweb.config.jwtconfig.JwtTokenUtil;
 import com.example.shoppingweb.dto.ClientLoginRequest;
-import com.example.shoppingweb.dto.UserRegistrationDto;
+import com.example.shoppingweb.dto.UserRegistrationDTO;
 import com.example.shoppingweb.model.NotificationEmail;
 import com.example.shoppingweb.model.User;
 import com.example.shoppingweb.model.VerificationToken;
 import com.example.shoppingweb.repository.UserRepository;
 import com.example.shoppingweb.repository.VerificationTokenRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,27 +25,29 @@ import java.util.UUID;
 //@AllArgsConstructor //use this instead of dependancy injection using autowired (recommended)
 public class AuthService {
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private  VerificationTokenRepository verificationTokenRepository;
+    private VerificationTokenRepository verificationTokenRepository;
     @Autowired
-    private  MailService mailService;
+    private MailService mailService;
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    @Qualifier("userDetailsServiceImp")
+    @Qualifier("userServiceImpl")
     private UserDetailsService userDetailsService;
 
 
     @Transactional
-    public void signup(UserRegistrationDto userRegistrationDto) {
+    public void signup(UserRegistrationDTO userRegistrationDto) {
         User user = new User();
         user.setUsername(userRegistrationDto.getUsername());
         user.setFirstName(userRegistrationDto.getFirstName());
+        user.setPhoneNo(userRegistrationDto.getPhoneNo());
+        user.setAddress(userRegistrationDto.getAddress());
         user.setLastName(userRegistrationDto.getLastName());
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
@@ -57,6 +58,7 @@ public class AuthService {
 
         generateVerificationToken(user);
     }
+
     //verify email by generate a token
     //if user verified -> enabled = true
     private void generateVerificationToken(User user) {
@@ -70,16 +72,16 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail(
                 "Welcome to Truong Shopping Web",
                 user.getEmail(),
-                "Please access this link to verify your account"
-                + "http://localhost:8080/api/auth/verify/ " + token
+                "Please access this link to verify your account: "
+                        + "http://localhost:8080/api/auth/verify/" + token
         ));
 
     }
 
     public String login(ClientLoginRequest clientLoginRequest) {
-      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-              clientLoginRequest.getUsername(), clientLoginRequest.getPassword()
-      ));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                clientLoginRequest.getUsername(), clientLoginRequest.getPassword()
+        ));
         UserDetails userDetails = userDetailsService
                 .loadUserByUsername(clientLoginRequest.getUsername());
 

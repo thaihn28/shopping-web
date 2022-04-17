@@ -10,11 +10,15 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDetail {
+public class ItemCartDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "productid")
     private Product product;
     private int quantity;
 }

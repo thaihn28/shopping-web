@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
 	public AdminServiceImpl(AdminRepository adminRepository) {
 		super();
 		this.adminRepository = adminRepository;
@@ -42,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
 		admin.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
 		Role role = roleRepository.findRoleById(2L);
-		admin.setRoles(Arrays.asList(role));
+		admin.setRole(role);
 		
 		return adminRepository.save(admin);
 	}
@@ -54,11 +55,14 @@ public class AdminServiceImpl implements AdminService {
 		if(ad == null) {
 			throw new UsernameNotFoundException("Admin not found");
 		}
-		return new org.springframework.security.core.userdetails.User(ad.getUsername(), ad.getPassword(), mapRolesToAuthorities(ad.getRoles()));
+		return new org.springframework.security.core.userdetails.User(ad.getUsername(), ad.getPassword(), getRoles(ad.getRole().getName()));
 	}
 	
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+//	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+//		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+//	}
+	private Collection<? extends GrantedAuthority> getRoles(String role) {
+		return Collections.singletonList(new SimpleGrantedAuthority(role));
 	}
 	
 }

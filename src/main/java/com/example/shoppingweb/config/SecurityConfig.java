@@ -1,6 +1,8 @@
 package com.example.shoppingweb.config;
 
 //see explain detail at 36:00
+import com.example.shoppingweb.config.jwtconfig.JwtAuthenticationEntryPoint;
+import com.example.shoppingweb.config.jwtconfig.JwtRequestFilter;
 import com.example.shoppingweb.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,7 +31,7 @@ public class SecurityConfig {
     private AdminService adminService;
 
     @Autowired
-    @Qualifier("userDetailsServiceImp")
+    @Qualifier("userServiceImpl")
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -52,7 +54,7 @@ public class SecurityConfig {
     public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/api/**")
+            http.antMatcher("/api/**") //mọi request có api sẽ vào đây trước
                     .cors().and()
                     .csrf().disable()
                     .authorizeRequests().antMatchers("/api/auth/**").permitAll()
@@ -61,12 +63,13 @@ public class SecurityConfig {
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                     .and()
                     .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS); //bỏ session
 
             // Add a filter to validate the tokens with every request
+            //sử dụng doFilter (like addFilterBefore): mọi request ngoài login phải đc authenticated trước kji thực hiện lệnh từ phía controller
             http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         }
-        //sử dụng doFilter: mọi request ngoài login phải đc authenticated trước kji thực hiện lệnh từ phía controller
+
 
         @Autowired
         @Override
@@ -101,10 +104,10 @@ public class SecurityConfig {
             http//add this to enable mail sent, have not known yet
                     .authorizeRequests()
                     .antMatchers(
-                            "/registration**",
                             "/js/**",
                             "/css/**",
                             "/img/**").permitAll()
+                    .antMatchers("/registration").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()
@@ -117,7 +120,8 @@ public class SecurityConfig {
                     .clearAuthentication(true)
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/login?logout")
-                    .permitAll();
+                    .permitAll()
+                    .and().exceptionHandling().accessDeniedPage("/access-denied");;
         }
 
     }
