@@ -38,8 +38,9 @@
                             <td th:text="${order.formatCheckOutDate()}"></td>
                             <td th:text="${order.calculateTotal()} + '$'"></td>
                             <td th:if="${order.status.equalsIgnoreCase('Waiting')}">Waiting</td>
-                            <td th:if="${order.status.equalsIgnoreCase('Accepted')}">Accepted</td>
                             <td th:if="${order.status.equalsIgnoreCase('Rejected')}" class="text-danger">Rejected</td>
+                            <td th:if="${order.status.equalsIgnoreCase('Confirmed')}" class="text-success">Confirmed</td>
+                            <td th:if="${order.status.equalsIgnoreCase('Approved')}" class="text-primary">Approved</td>
                             <td>
                                 <a class="btn btn-primary"
                                    th:href="'/order/view-order-detail/' + ${order.id}">Detail</a>
@@ -48,22 +49,10 @@
 
                                     <input class="btn btn-danger" type="submit" value="Delete">
                                 </form>
-<!--                                <a class="btn btn-success" th:href="'/order/approve/' + ${order.id}"-->
-<!--                                   th:if="${order.accept == false}">Accept</a>-->
-<!--                                <a class="btn btn-warning" th:href="'/order/approve/' + ${order.id}"-->
-<!--                                   th:if="${order.accept == true}">Unaccept</a>-->
                             </td>
 
                             <td>
-<!--                                <div th:if="${order.accept == true}">-->
 
-
-<!--                                    <form th:action="'/reservation/confirm/' + ${order.id}"-->
-<!--                                          onsubmit="return confirm('Do you really want to confirm this reservation');">-->
-
-<!--                                        <input class="btn btn-danger" type="submit" value="Confirm">-->
-<!--                                    </form>-->
-<!--                                </div>-->
 
                             </td>
                         </tr>

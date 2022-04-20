@@ -58,6 +58,7 @@ public class SecurityConfig {
                     .cors().and()
                     .csrf().disable()
                     .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                    //.antMatchers("**/test/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

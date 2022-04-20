@@ -15,4 +15,6 @@ public interface ItemCartDetailRepository extends JpaRepository<ItemCartDetail, 
     List<ItemCartDetail> findItemCartDetailByUser(User user);
     ItemCartDetail findItemCartDetailByUserAndProduct(User user, Product product);
     void deleteAllByUser(User user);
+    boolean existsByProductProductIdAndAndUser(Long id, User user);
+    ItemCartDetail findItemCartDetailByProduct_ProductIdAndUser(Long id, User user);
 }

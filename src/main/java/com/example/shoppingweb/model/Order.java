@@ -25,6 +25,10 @@ public class Order {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+7")
+    private Date approveTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+7")
     private Date checkOutTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -61,10 +65,16 @@ public class Order {
         return FormatDateHelper.getInstance().format(this.rejectTime);
     }
     public String formatConfirmDate() throws ParseException {
-        if (!status.equals("Confirm")) {
+        if (!status.equals("Confirmed")) {
             return "Has not been confirmed";
         }
         return FormatDateHelper.getInstance().format(this.confirmTime);
+    }
+    public String approveDate() throws ParseException {
+        if (approveTime == null) {
+            return "Has not been approved";
+        }
+        return FormatDateHelper.getInstance().format(this.approveTime);
     }
 
 }

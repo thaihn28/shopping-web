@@ -26,7 +26,7 @@ public class MailService {
             helper.setFrom("qque722@gmail.com");
             helper.setTo(notificationEmail.getRecipient());
             helper.setSubject(notificationEmail.getSubject());
-            helper.setText(mailContentBuilder.build(notificationEmail.getBody()));
+            helper.setText(notificationEmail.getBody());
 
             mailSender.send(message);
             System.out.println("Activation mail send!!");

@@ -43,7 +43,8 @@ public class OrderApi {
 
         for (Order order : orders) {
             OrderDTO orderDTO = new OrderDTO();
-            orderDTO.setId(orderDTO.getId());
+            orderDTO.setId(order.getId());
+            orderDTO.setApproveTime(order.getApproveTime());
             orderDTO.setConfirmTime(order.getConfirmTime());
             orderDTO.setCheckOutTime(order.getCheckOutTime());
             orderDTO.setRejectTime(order.getRejectTime());
@@ -72,14 +73,42 @@ public class OrderApi {
             return new ResponseEntity<>("Order not exist", HttpStatus.NOT_FOUND);
         }
 
-        if (order.getStatus().equals("Delivering") || order.getStatus().equals("Confirm")) {
-            return new ResponseEntity<>("Cannot cancel while the order is being delivered", HttpStatus.NOT_ACCEPTABLE);
+        if (order.getStatus().equals("Approved") || order.getStatus().equals("Confirm")) {
+            return new ResponseEntity<>("Cannot cancel while the order is approved", HttpStatus.NOT_ACCEPTABLE);
         }
         order.setStatus("Rejected");
         order.setRejectTime(new Date());
         orderRepository.save(order);
 
         return new ResponseEntity<>("Order has been rejected successfully", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/view-order/{id}")
+    public ResponseEntity<?> viewOrder(@PathVariable("id") Long id) {
+        Order order = orderRepository.getOrderByIdAndUser(id, getLoggedInUser());
+        if (order == null) {
+            return new ResponseEntity<>("Order not exist", HttpStatus.NOT_FOUND);
+        }
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(order.getId());
+        orderDTO.setApproveTime(order.getApproveTime());
+        orderDTO.setConfirmTime(order.getConfirmTime());
+        orderDTO.setCheckOutTime(order.getCheckOutTime());
+        orderDTO.setRejectTime(order.getRejectTime());
+        orderDTO.setTotalPrice(order.calculateTotal());
+        orderDTO.setStatus(order.getStatus());
+        List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
+
+        for (OrderDetail orderDetail : order.getOrderDetails()) {
+            OrderItemDTO orderItemDTO = new OrderItemDTO();
+            orderItemDTO.setProduct(orderDetail.getProduct());
+            orderItemDTO.setOrderQuantity(orderDetail.getQuantity());
+            orderItemDTOList.add(orderItemDTO);
+        }
+        orderDTO.setOrderItem(orderItemDTOList);
+
+        return new ResponseEntity<>(orderDTO, HttpStatus.OK);
     }
 
 

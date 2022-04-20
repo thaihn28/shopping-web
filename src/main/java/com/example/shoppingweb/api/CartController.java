@@ -81,13 +81,16 @@ public class CartController {
     }
 
     @GetMapping("/delete-from-cart/{id}")
-    public ResponseEntity<?> deleteFromCart(@PathVariable(name = "id") @Min(1) int productId) {
+    public ResponseEntity<?> deleteFromCart(@PathVariable(name = "id") Long productId) {
         User user = getLoggedInUser();
-        Product product = productRepository.findByProductId((long) productId);
-        if (product == null) {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+//        Product product = productRepository.findByProductId((long) productId);
+//        if (product == null) {
+//            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+//        }
+        ItemCartDetail itemCartDetail = itemCartDetailRepository.findItemCartDetailByProduct_ProductIdAndUser(productId, user);
+        if (itemCartDetail == null) {
+            return new ResponseEntity<>("Item not found", HttpStatus.NOT_FOUND);
         }
-        ItemCartDetail itemCartDetail = itemCartDetailRepository.findItemCartDetailByUserAndProduct(user, product);
 
         itemCartDetailRepository.delete(itemCartDetail);
 
@@ -95,19 +98,19 @@ public class CartController {
     }
 
     @GetMapping("/change-quantity/{id}/{quantity}")
-    public ResponseEntity<?> changeProductQuantity(@PathVariable("id") int productId, @PathVariable("quantity") int quantity) {
+    public ResponseEntity<?> changeProductQuantity(@PathVariable("id") Long productId, @PathVariable("quantity") int quantity) {
         User user = getLoggedInUser();
-        Product product = productRepository.findByProductId((long) productId);
-        if (product == null) {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
-        }
-
+//        Product product = productRepository.findByProductId((long) productId);
+//        if (product == null) {
+//            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+//        }
+//
         if (quantity < 1) {
-            return new ResponseEntity<>("Quantity must be greater than 1", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Quantity must be greater than 1", HttpStatus.BAD_REQUEST);
         }
-        ItemCartDetail itemCartDetail = itemCartDetailRepository.findItemCartDetailByUserAndProduct(user, product);
+        ItemCartDetail itemCartDetail = itemCartDetailRepository.findItemCartDetailByProduct_ProductIdAndUser(productId, user);
         if (itemCartDetail == null) {
-            return new ResponseEntity<>("Item in cart not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Item not found in the cart", HttpStatus.NOT_FOUND);
         }
         itemCartDetail.setQuantity(quantity);
         itemCartDetailRepository.save(itemCartDetail);
@@ -122,7 +125,7 @@ public class CartController {
         List<OrderDetail> orderDetailList = new ArrayList<>();
 
         if (items.size() == 0) {
-            return new ResponseEntity<>("There are no item in the cart to check out", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("There are no item in the cart to check out", HttpStatus.BAD_REQUEST);
         }
 
         Order order = new Order();
