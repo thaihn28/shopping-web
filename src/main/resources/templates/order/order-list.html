@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="wrapper">
+        <div class="container ">
+            <h2 class="text-center">Order Management</h2>
+
+            <section class="panel">
+                <table class="table table-striped table-advance table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Client Username</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>Check Out Date</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Option</th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:each="order: ${orders}">
+                        <tr>
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.user.username}"></td>
+                            <td th:text="${order.user.phoneNo}"></td>
+                            <td th:text="${order.user.address}"></td>
+                            <td th:text="${order.formatCheckOutDate()}"></td>
+                            <td th:text="${order.calculateTotal()} + '$'"></td>
+                            <td th:if="${order.status.equalsIgnoreCase('Waiting')}">Waiting</td>
+                            <td th:if="${order.status.equalsIgnoreCase('Rejected')}" class="text-danger">Rejected</td>
+                            <td th:if="${order.status.equalsIgnoreCase('Confirmed')}" class="text-success">Confirmed</td>
+                            <td th:if="${order.status.equalsIgnoreCase('Approved')}" class="text-primary">Approved</td>
+                            <td>
+                                <a class="btn btn-primary"
+                                   th:href="'/order/view-order-detail/' + ${order.id}">Detail</a>
+                                <form th:action="'/order/delete/' + ${order.id}"
+                                      onsubmit="return confirm('Do you really want to delete this order');">
+
+                                    <input class="btn btn-danger" type="submit" value="Delete">
+                                </form>
+                            </td>
+
+                            <td>
+
+
+                            </td>
+                        </tr>
+
+
+                    </div>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
