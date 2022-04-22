@@ -3,8 +3,10 @@ package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.dto.ProductDTO;
 import com.example.shoppingweb.model.Category;
+import com.example.shoppingweb.model.Discount;
 import com.example.shoppingweb.model.Product;
 import com.example.shoppingweb.service.CategoryService;
+import com.example.shoppingweb.service.DiscountService;
 import com.example.shoppingweb.service.ProductService;
 import com.example.shoppingweb.service.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    DiscountService discountService;
 
     // Product sessions
 
@@ -85,7 +90,7 @@ public class ProductController {
             List<Category> categoryList = categoryService.getAllCategory();
             model.addAttribute("product", product);
             model.addAttribute("categories", categoryList);
-
+            model.addAttribute("discounts", discountService.getAllDiscounts());
             return "/product/productDetail";
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -97,6 +102,7 @@ public class ProductController {
     public String addProduct(Model model, RedirectAttributes ra){
         model.addAttribute("productDTO", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategory());
+        model.addAttribute("discounts", discountService.getAllDiscounts());
         ra.addFlashAttribute("pageTitle", "Add a new product");
         return "/product/productAdd";
     }
@@ -109,10 +115,14 @@ public class ProductController {
                               RedirectAttributes ra
     ) throws IOException, UserNotFoundException {
         Product product = new Product();
+        Discount findDiscount = discountService.getDiscountByID(productDTO.getDiscountId());
         product.setProductId(productDTO.getProductId());
         product.setName(productDTO.getName());
         product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
+        product.setDiscount(discountService.getDiscountByID(productDTO.getDiscountId()));
         product.setPrice(productDTO.getPrice());
+        double calDiscount = Double.valueOf(findDiscount.getDiscountPrice()) / 100;
+        product.setDiscountPrice(productDTO.getPrice() - (calDiscount * productDTO.getPrice()));
         product.setQuantity(productDTO.getQuantity());
         product.setDescription(productDTO.getDescription());
         String imageUUID;
@@ -133,6 +143,7 @@ public class ProductController {
         product.setImageName("http://localhost:8080/productImages/" + imageUUID);
         productService.addProduct(product);
         model.addAttribute("categories", categoryService.getAllCategory());
+        model.addAttribute("discounts", discountService.getAllDiscounts());
         return "redirect:/admin/products";
     }
 
@@ -152,12 +163,15 @@ public class ProductController {
             productDTO.setProductId(product.getProductId());
             productDTO.setName(product.getName());
             productDTO.setCategoryId(product.getCategory().getId());
-            productDTO.setPrice(product.getPrice() );
+            productDTO.setDiscountId(product.getDiscount().getDiscountId());
+            productDTO.setPrice(product.getPrice());
+//            productDTO.setPriceDiscount(product.getDiscountPrice());
             productDTO.setQuantity(product.getQuantity());
             productDTO.setDescription(product.getDescription());
             productDTO.setImageName(product.getImageName());
 
             model.addAttribute("categories", categoryService.getAllCategory());
+            model.addAttribute("discounts", discountService.getAllDiscounts());
             model.addAttribute("productDTO", productDTO);
             model.addAttribute("pageTitle" , "Update category (Id: " + id + ")" );
             return "/product/productAdd";

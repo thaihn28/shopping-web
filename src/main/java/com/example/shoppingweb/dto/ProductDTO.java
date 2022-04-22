@@ -11,10 +11,28 @@ public class ProductDTO {
     private Long productId;
     private String name;
     private int price;
+    private double priceDiscount;
     private String description;
     private int quantity;
     private String imageName;
     private int categoryId;
+    private Long discountId;
+
+    public double getPriceDiscount() {
+        return priceDiscount;
+    }
+
+    public void setPriceDiscount(double priceDiscount) {
+        this.priceDiscount = priceDiscount;
+    }
+
+    public Long getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(Long discountId) {
+        this.discountId = discountId;
+    }
 
     public Long getProductId() {
         return productId;

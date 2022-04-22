@@ -2,9 +2,12 @@ package com.example.shoppingweb.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Value;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 @Entity
@@ -19,6 +22,9 @@ public class Product {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    private Discount discount;
+
     @NotNull
     @Column
     private String name;
@@ -26,6 +32,8 @@ public class Product {
     @NotNull
     @Column
     private int price;
+
+    private double discountPrice;
 
     @NotNull
     @Column
