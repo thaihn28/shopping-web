@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="img/favicon.png">
 
 
-    <title>Restaurant Admin</title>
+    <title>Admin</title>
 
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -53,46 +53,62 @@
 
 <body>
 <!-- container section start -->
+
 <section id="container" class="">
     <header class="header dark-bg">
+        <div sec:authorize="isAuthenticated()">
         <div class="toggle-nav">
             <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
         </div>
+        </div>
 
         <!--logo start-->
-        <a th:href="@{/admin}" class="logo">Restaurant <span class="lite">Admin</span></a>
+        <a th:href="@{/admin}" class="logo"> <span class="lite">Admin</span></a>
         <!--logo end-->
 
-        <div class="nav search-row" id="top_menu">
+
+<!--        <div class="nav search-row" id="top_menu">-->
+
+<!--        </div>
+        <p>Welcome: </p>
+        <div sec:authentication="name"></div>
+
+        <div sec:authentication="principal.authorities"></div>
+
+        <div class="top-nav notification-row">
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/logout}" class="logo">Logout</a>
+        </div> -->
 
         </div>
-<!--        <div class="top-nav notification-row">-->
-<!--            <ul class="nav pull-right top-menu">-->
-<!--                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">-->
-<!--                            <span class="profile-ava">-->
-<!--                                <img alt="" th:src="@{/img/user.jpg}">-->
-<!--                            </span>-->
-<!--                        <span class="username" sec:authentication="principal.username"></span>-->
-<!--                    </a>-->
-<!--                    <ul class="dropdown-menu extended logout">-->
-<!--                        <div class="log-arrow-up"></div>-->
-<!--                        <li class="eborder-top">-->
-<!--                            <a href="#"><i class="icon_profile"></i> My Profile</a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="login.html" th:href="@{/logout}"><i class="icon_key_alt" ></i> Log Out</a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--            </ul>-->
-<!--        </div>-->
+                <div sec:authorize="isAuthenticated()" class="top-nav notification-row">
+                    <ul class="nav pull-right top-menu">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="profile-ava">
+                                        <img alt="" th:src="@{/img/user.jpg}">
+                                    </span>
+                                <span class="username" sec:authentication="name"></span>
+                            </a>
+                            <ul class="dropdown-menu extended logout">
+                                <div class="log-arrow-up"></div>
+<!--                                <li class="eborder-top">-->
+<!--                                    <a href="#"><i class="icon_profile"></i> My Profile</a>-->
+<!--                                </li>-->
+                                <li>
+                                    <a href="login.html" th:href="@{/logout}"><i class="icon_key_alt" ></i> Log Out</a>
+                                </li>
+<!--                                <li>-->
+<!--                                    <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>-->
+<!--                                </li>-->
+                            </ul>
+                    </ul>
+                </div>
 
     </header>
     <!--header end-->
 
     <!--sidebar start-->
+    <div sec:authorize="isAuthenticated()">
     <aside>
         <div id="sidebar" class="nav-collapse" >
             <!-- sidebar menu start-->
@@ -116,11 +132,19 @@
                     </a>
                 </li>
                 <li class="sub-menu">
-                    <a href="javascript:;" class="" th:href="@{/admin/carts}">
+                    <a href="javascript:;" class="" th:href="@{/order/view-orders}">
                         <i class="fa fa-folder"></i>
                         <span>Orders</span>
                     </a>
                 </li>
+                <div sec:authorize="hasRole('ADMIN')">
+                <li class="sub-menu">
+                    <a href="javascript:;" class="" th:href="@{/registration}">
+                        <i class="fa fa-folder"></i>
+                        <span>Register a new staff</span>
+                    </a>
+                </li>
+                </div>
 <!--                <li class="sub-menu">-->
 <!--                    <a href="javascript:;" class="" th:href="@{admin/registrationAdmin}">-->
 <!--                        <i class="fa fa-sign-in"></i>-->
@@ -132,6 +156,7 @@
             <!-- sidebar menu end-->
         </div>
     </aside>
+    </div>
     <!--sidebar end-->
 
     <!--main content start-->
