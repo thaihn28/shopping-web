@@ -25,6 +25,7 @@ public class CategoryAPI {
     public List<Category> viewAllCategories(){
         return categoryService.getAllCategory();
     }
+
     @RequestMapping("/category/{id}")
     public List<Product> getProductByCategory(@PathVariable("id") int id) {
         return productService.getAllProductsByCategoryId(id);
