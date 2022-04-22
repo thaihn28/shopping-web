@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+
+<body>
+
+<div layout:fragment="content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header"><i class="fa fa fa-bars"></i> Vouchers</h3>
+                <ol class="breadcrumb">
+                    <li><i class="fa fa-home"></i><a th:href="@{/admin}">Home</a></li>
+                    <li><i class="fa fa-bars"></i><a th:href="@{/admin/vouchers}">Vouchers</a></li>
+                    <li><i class="fa fa-square-o"></i>Detail</li>
+                </ol>
+            </div>
+        </div>
+    <div class="container" style="width: 70%">
+        <div class="row justify-content-center" >
+            <div class="col-lg-12">
+                <form class="form-horizontal" th:action="@{'/admin/vouchers/update/'+${voucher.voucherId}}" method="put">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            Voucher Detail
+                        </header>
+                        <div class="panel-body">
+                            <!--date picker start-->
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">ID</label>
+                                <div class="col-sm-6">
+                                    <div th:size="20px" th:text="${voucher.voucherId}" style="font-weight: bold"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Name</label>
+                                <div class="col-sm-7">
+                                    <div th:size="20px" th:text="${voucher.name}" style="font-weight: bold"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Code</label>
+                                <div class="col-sm-7">
+                                    <div th:size="20px" th:text="${voucher.code}" style="font-weight: bold"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Price</label>
+                                <div class="col-sm-7">
+                                    <div th:size="20px" th:text="${voucher.price} + '$'" style="font-weight: bold"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="panel">
+
+                        <div class="panel-body">
+                            <a th:href="@{/admin/vouchers/update/{id}(id = ${voucher.voucherId})} " class="btn btn-primary">
+                                Edit
+                            </a>
+                            <a th:href="@{/admin/vouchers}" class="btn  btn-warning">
+                                Exit
+                            </a>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+    </section>
+</div>
+
+</body>
+</html>

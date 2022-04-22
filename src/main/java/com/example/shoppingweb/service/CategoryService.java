@@ -32,15 +32,4 @@ public class CategoryService {
         }
         throw new UserNotFoundException("Could not find any user with id" + id);
     }
-
-    public List<Category> findAllCategoryByName(String name){
-       List<Category> result =  categoryRepository.findAllByNameContains(name);
-       if(result != null){
-           return result;
-       }else {
-           System.out.println("Can not find any category");
-           return null;
-       }
-    }
-
 }

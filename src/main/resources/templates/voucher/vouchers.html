@@ -9,10 +9,10 @@
     <section class="wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h3 class="page-header"><i class="fa fa fa-bars"></i> Categories</h3>
+                <h3 class="page-header"><i class="fa fa fa-bars"></i> Vouchers</h3>
                 <ol class="breadcrumb">
                     <li><i class="fa fa-home"></i><a th:href="@{/admin}">Home</a></li>
-                    <li><i class="fa fa-bars"></i><a th:href="@{/admin/categories}">Categories</a></li>
+                    <li><i class="fa fa-bars"></i><a th:href="@{/admin/vouchers}">Vouchers</a></li>
                 </ol>
             </div>
         </div>
@@ -25,8 +25,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6">
-                            <a th:href="@{/admin/categories/add}" class="btn btn-primary">
-                                Add New Category
+                            <a th:href="@{/admin/vouchers/add}" class="btn btn-primary">
+                                Add New Voucher
                             </a>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
             </section>
             <section class="panel">
                 <header class="panel-heading">
-                    <div class="text-center" style="font-size: 24px; font-weight: bold" >Manage Categories</div>
+                        <div class="text-center" style="font-size: 24px; font-weight: bold" >Manage Vouchers</div>
                 </header>
 
                 <table class="table table-striped table-advance table-hover">
@@ -47,20 +47,20 @@
                         <th><i class="fa fa-info"></i> Detail</th>
                     </tr>
 
-                    <tr th:each="category, iStat : ${categories}">
+                    <tr th:each="voucher, iStat : ${vouchers}">
                         <td th:text="${iStat.index + 1}"></td>
-                        <td th:text="${category.id}"></td>
-                        <td th:text="${category.name}"></td>
+                        <td th:text="${voucher.voucherId}"></td>
+                        <td th:text="${voucher.name}"></td>
                         <td>
-                            <a th:data-id="${category.id}"
-                               th:data-name="${category.name}"
+                            <a th:data-id="${voucher.voucherId}"
+                               th:data-name="${voucher.name}"
                                onclick="showConfirmModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
                                class="btn btn-danger" style="color: white">Delete
                             </a>
-                            <a href="" th:href="@{/admin/categories/update/{id}(id=${category.id})}" class="btn btn-warning">Update</a>
+                            <a href="" th:href="@{/admin/vouchers/update/{id}(id=${voucher.voucherId})}" class="btn btn-warning">Update</a>
                         </td>
                         <td>
-                            <a class="btn btn-info" th:href="@{/admin/categories/detail/{id}(id=${category.id})}">View</a>
+                            <a class="btn btn-info" th:href="@{/admin/vouchers/detail/{id}(id=${voucher.voucherId})}">View</a>
                         </td>
                     </tr>
                     </tbody>
@@ -112,7 +112,7 @@
     <script>
         function showConfirmModalDialog(id, name) {
             $('#productName').text(name);
-            $('#yesOption').attr('href', '/admin/categories/delete/' + id);
+            $('#yesOption').attr('href', '/admin/vouchers/delete/' + id);
             $('#confirmationId').modal('show');
         }
     </script>
