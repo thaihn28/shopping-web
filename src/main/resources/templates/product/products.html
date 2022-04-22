@@ -67,7 +67,7 @@
                     <tr th:each="product, iStat : ${products}">
                         <td th:text="${iStat.index + 1}"></td>
                         <td th:text="${product.productId}"></td>
-                        <td th:text="${product.name}"></td>
+                        <td style="overflow: hidden;text-overflow: clip; white-space: nowrap" th:text="${product.name}"></td>
                         <td th:text="${product.category.name}"></td>
                         <td><img src="" height="100px" width="100px"  th:src="${product.imageName}"></td>
                         <!--            Show dialog to delete-->
