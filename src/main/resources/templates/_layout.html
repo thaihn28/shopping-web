@@ -138,17 +138,16 @@
                     </a>
                 </li>
                 <li class="sub-menu">
-                    <a href="javascript:;" class="" th:href="@{/admin/carts}">
-                        <i class="fa fa-shopping-cart"></i>
                     <a href="javascript:;" class="" th:href="@{/order/view-orders}">
-                        <i class="fa fa-folder"></i>
+                        <i class="fa fa-shopping-cart"></i>
                         <span>Orders</span>
+                    </a>
                     </a>
                 </li>
                 <div sec:authorize="hasRole('ADMIN')">
                 <li class="sub-menu">
                     <a href="javascript:;" class="" th:href="@{/registration}">
-                        <i class="fa fa-folder"></i>
+                        <i class="fa fa-user"></i>
                         <span>Register a new staff</span>
                     </a>
                 </li>

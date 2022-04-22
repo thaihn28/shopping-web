@@ -19,7 +19,6 @@ public class Product {
     @ManyToOne
     private Category category;
 
-
     @NotNull
     @Column
     private String name;

@@ -152,7 +152,7 @@ public class ProductController {
             productDTO.setProductId(product.getProductId());
             productDTO.setName(product.getName());
             productDTO.setCategoryId(product.getCategory().getId());
-            productDTO.setPrice(product.getPrice());
+            productDTO.setPrice(product.getPrice() );
             productDTO.setQuantity(product.getQuantity());
             productDTO.setDescription(product.getDescription());
             productDTO.setImageName(product.getImageName());
