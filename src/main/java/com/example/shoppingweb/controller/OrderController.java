@@ -60,7 +60,7 @@ public class OrderController {
             return "redirect:/order/view-order-detail/" + order.getId();
         }
         order.setStatus("Rejected");
-        order.setApproveTime(new Date());
+        order.setRejectTime(new Date());
         redirectAttributes.addFlashAttribute("msg", "Order " + id + " status has been rejected");
 
         Order saveOrder = orderRepository.save(order);

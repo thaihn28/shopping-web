@@ -23,13 +23,13 @@ public class MailService {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("qque722@gmail.com");
+            helper.setFrom("shoppingwebservicese2@gmail.com");
             helper.setTo(notificationEmail.getRecipient());
             helper.setSubject(notificationEmail.getSubject());
             helper.setText(notificationEmail.getBody());
 
             mailSender.send(message);
-            System.out.println("Activation mail send!!");
+            System.out.println("Mail send!!");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

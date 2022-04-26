@@ -8,12 +8,15 @@ import com.example.shoppingweb.model.User;
 import com.example.shoppingweb.model.VerificationToken;
 import com.example.shoppingweb.repository.UserRepository;
 import com.example.shoppingweb.repository.VerificationTokenRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,16 +70,62 @@ public class AuthService {
         verificationToken.setToken(token);
         verificationToken.setUser(user);
         verificationTokenRepository.save(verificationToken);
-        //click on the url -> check token from db-> fetch the user use this token
-        // -> enable
-        mailService.sendMail(new NotificationEmail(
-                "Welcome to Truong Shopping Web",
-                user.getEmail(),
-                "Please access this link to verify your account: "
-                        + "http://localhost:8080/api/auth/verify/" + token
-        ));
+        sendMail(user.getEmail(), token, null);
+    }
+
+    @Async
+    public void generateForgotPasswordToken(String username) throws UserNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        String token = RandomStringUtils.randomAlphanumeric(20);
+        user.setForgotPasswordToken(token);
+        sendMail(user.getEmail(), null, token);
+        userRepository.save(user);
+        try {
+            serviceCallB(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Async
+    void serviceCallB(User user) throws InterruptedException {
+        Thread.sleep(600000); // 10 minutes
+        // do service B call stuff
+        user.setForgotPasswordToken(null);
+        userRepository.save(user);
 
     }
+
+    public void resetPassword(String pass, User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(pass));
+        user.setForgotPasswordToken(null);
+        userRepository.save(user);
+    }
+
+    private void sendMail(String email, String verifyToken, String forgotPassToken) {
+        //click on the url -> check token from db-> fetch the user use this token
+        // -> enable
+        if (verifyToken != null) {
+            mailService.sendMail(new NotificationEmail(
+                    "Welcome to Truong Shopping Web",
+                    email,
+                    "Please access this link to verify your account: "
+                            + "http://localhost:8080/api/auth/verify/" + verifyToken
+            ));
+        }
+        if (forgotPassToken != null) {
+            mailService.sendMail(new NotificationEmail(
+                    "Welcome to Truong Shopping Web",
+                    email,
+                    "Access this link to reset your password: "
+                            + "http://localhost:8080/forgot-password/" + forgotPassToken
+            ));
+        }
+    }
+
 
     public String login(ClientLoginRequest clientLoginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

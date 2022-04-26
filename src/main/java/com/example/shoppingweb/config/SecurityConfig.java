@@ -109,6 +109,8 @@ public class SecurityConfig {
                             "/css/**",
                             "/img/**").permitAll()
                     .antMatchers("/registration").hasRole("ADMIN")
+                    .antMatchers("/staff-management/**").hasRole("ADMIN")
+                    .antMatchers("/forgot-password/**").anonymous()
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()

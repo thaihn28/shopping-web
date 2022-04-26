@@ -84,8 +84,8 @@
                                         <div th:size="20px" th:text="${order.approveDate()}"
                                              style="font-weight: bold"></div>
                                     </div>
-                                    <div th:if="${order.status.equalsIgnoreCase('Waiting') || !order.status.equalsIgnoreCase('Confirmed')}">
-                                    <a class="btn btn-success"
+                                    <div th:if="${order.status.equalsIgnoreCase('Waiting') && !order.status.equalsIgnoreCase('Approved') && !order.status.equalsIgnoreCase('Confirmed')}">
+                                    <a class="btn btn-primary"
                                        th:href="'/order/approve-order/' + ${order.id}">Approve</a>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                         <div th:text="${order.formatConfirmDate()}"/>
                                     </div>
                                     <div th:if="${!order.status.equalsIgnoreCase('Confirmed')}">
-                                        <a class="btn btn-primary"
+                                        <a class="btn btn-success"
                                            th:href="'/order/confirm-order/' + ${order.id}">Confirm</a>
                                     </div>
                                 </div>

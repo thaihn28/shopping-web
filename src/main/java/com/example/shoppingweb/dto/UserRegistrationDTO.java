@@ -1,12 +1,15 @@
 package com.example.shoppingweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -28,11 +31,13 @@ public class UserRegistrationDTO {
 	@NotBlank(message = "Confirm password can not be empty")
 	private String confirmPassword;
 	@NotBlank(message = "Phone number can not be empty")
-	@Length(max = 10, min = 10)
 	@Pattern(regexp = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", message = "Must be in Vietnam number format")
 	private String phoneNo;
 	@NotBlank(message = "Address cannot be empty")
 	private String address;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date dob;
 
 	// test merge
 }
