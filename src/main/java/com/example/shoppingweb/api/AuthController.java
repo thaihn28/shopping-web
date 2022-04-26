@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid UserRegistrationDTO registerRequest) {
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return new ResponseEntity<>("register successful", HttpStatus.OK);
+            return new ResponseEntity<>("New pasword not match with confirm password", HttpStatus.OK);
         }
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return new ResponseEntity<>("Username already exist", HttpStatus.NOT_ACCEPTABLE);
