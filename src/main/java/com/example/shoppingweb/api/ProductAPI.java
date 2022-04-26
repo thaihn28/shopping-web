@@ -26,7 +26,7 @@ public class ProductAPI {
         return productService.getAllProduct();
     }
 
-    @RequestMapping(value = "/product/{id}")
+    @RequestMapping(value = "product/{id}")
     public Product productById(@PathVariable("id") Long id) throws UserNotFoundException {
         return productService.getProductById(id);
     }
