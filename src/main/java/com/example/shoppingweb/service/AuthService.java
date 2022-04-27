@@ -55,6 +55,7 @@ public class AuthService {
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
         user.setCreated(Instant.now());
+        user.setDob(userRegistrationDto.getDob());
         user.setEnabled(false);
 
         userRepository.save(user);

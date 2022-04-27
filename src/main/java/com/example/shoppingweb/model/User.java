@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
@@ -34,14 +35,20 @@ public class User {
     @NotEmpty(message = "Email is required")
     @Column(name = "email")
     private String email;
+    @NotNull
     private String phoneNo;
+    @NotNull
     private String address;
     private String forgotPasswordToken;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
+    @NotNull
     private Instant created;
+    @NotNull
     private boolean enabled;
 
 

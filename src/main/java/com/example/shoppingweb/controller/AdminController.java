@@ -83,6 +83,7 @@ public class AdminController {
             if (!password.equals(confirmPassword)) {
                 model.addAttribute("errmsg", "Password not match");
                 return "error";
+                
             }
             authService.resetPassword(password, user);
 
