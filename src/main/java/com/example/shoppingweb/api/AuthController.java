@@ -65,7 +65,7 @@ public class AuthController {
         return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
     }
 
-    @GetMapping("/forgot-password")
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody UsernameDTO usernameDTO) {
         User user = userRepository.findUserByUsername(usernameDTO.getUsername());
         if (user == null) {
