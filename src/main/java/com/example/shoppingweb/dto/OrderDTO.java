@@ -34,6 +34,7 @@ public class OrderDTO {
 
     private List<OrderItemDTO> orderItem;
 
+    private double realPrice;
     private double totalPrice;
 
 }

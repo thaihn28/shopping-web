@@ -42,34 +42,40 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
-    @Transient
     private double totalPrice;
 
     private String status;
 
-    public double calculateTotal() {
+//    @OneToOne
+//    private Voucher voucher;
+
+    public double calculateTotalByProduct() {
         double total;
-        for (OrderDetail orderDetail : orderDetails) {
-            totalPrice += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
-        }
+            for (OrderDetail orderDetail : orderDetails) {
+                totalPrice += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
+            }
+
         return total = totalPrice;
     }
 
     public String formatCheckOutDate() throws ParseException {
         return FormatDateHelper.getInstance().format(this.checkOutTime);
     }
+
     public String formatRejectDate() throws ParseException {
         if (!status.equals("Rejected")) {
             return "Has not been rejected";
         }
         return FormatDateHelper.getInstance().format(this.rejectTime);
     }
+
     public String formatConfirmDate() throws ParseException {
         if (!status.equals("Confirmed")) {
             return "Has not been confirmed";
         }
         return FormatDateHelper.getInstance().format(this.confirmTime);
     }
+
     public String approveDate() throws ParseException {
         if (approveTime == null) {
             return "Has not been approved";

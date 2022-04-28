@@ -48,7 +48,8 @@ public class OrderApi {
             orderDTO.setConfirmTime(order.getConfirmTime());
             orderDTO.setCheckOutTime(order.getCheckOutTime());
             orderDTO.setRejectTime(order.getRejectTime());
-            orderDTO.setTotalPrice(order.calculateTotal());
+            orderDTO.setTotalPrice(order.getTotalPrice());
+            orderDTO.setRealPrice(order.calculateTotalByProduct());
             orderDTO.setStatus(order.getStatus());
 
             List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
@@ -96,7 +97,8 @@ public class OrderApi {
         orderDTO.setConfirmTime(order.getConfirmTime());
         orderDTO.setCheckOutTime(order.getCheckOutTime());
         orderDTO.setRejectTime(order.getRejectTime());
-        orderDTO.setTotalPrice(order.calculateTotal());
+        orderDTO.setTotalPrice(order.getTotalPrice());
+        orderDTO.setRealPrice(order.calculateTotalByProduct());
         orderDTO.setStatus(order.getStatus());
         List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
 

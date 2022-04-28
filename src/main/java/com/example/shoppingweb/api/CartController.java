@@ -2,10 +2,12 @@ package com.example.shoppingweb.api;
 
 import com.example.shoppingweb.dto.AddToCartDTO;
 import com.example.shoppingweb.dto.CartItemDTO;
+import com.example.shoppingweb.dto.VoucherDTO;
 import com.example.shoppingweb.model.*;
 import com.example.shoppingweb.repository.ItemCartDetailRepository;
 import com.example.shoppingweb.repository.OrderRepository;
 import com.example.shoppingweb.repository.ProductRepository;
+import com.example.shoppingweb.repository.VoucherRepository;
 import com.example.shoppingweb.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,8 @@ public class CartController {
     private ProductRepository productRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     private User getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -119,13 +123,20 @@ public class CartController {
     }
 
     @PostMapping("/check-out")
-    public ResponseEntity<?> checkOut() {
+    public ResponseEntity<?> checkOut(@RequestBody(required = false) VoucherDTO voucherDTO) {
         User user = getLoggedInUser();
         List<ItemCartDetail> items = itemCartDetailRepository.findItemCartDetailByUser(user);
         List<OrderDetail> orderDetailList = new ArrayList<>();
+        boolean b = false;
 
         if (items.size() == 0) {
             return new ResponseEntity<>("There are no item in the cart to check out", HttpStatus.BAD_REQUEST);
+        }
+
+        if (voucherDTO != null) {
+            if (b = !voucherRepository.existsVoucherByCode(voucherDTO.getCode())) {
+                return new ResponseEntity<>("Voucher not found", HttpStatus.BAD_REQUEST);
+            }
         }
 
         Order order = new Order();
@@ -138,9 +149,25 @@ public class CartController {
             orderDetail.setProduct(item.getProduct());
             orderDetail.setQuantity(item.getQuantity());
             orderDetail.setOrder(order);
+
+//            if (item.getProduct().getDiscount() != null) {
+//                orderDetail.setDiscountStatus(null);
+//            } else {
+//                DiscountStatus discountStatus = new DiscountStatus();
+//                discountStatus.setDiscountPrice(item.getProduct().getDiscount().getDiscountPrice());
+//                discountStatus.setStatus(true);
+//                orderDetail.setDiscountStatus(discountStatus);
+//            }
             orderDetailList.add(orderDetail);
         }
-
+        int totalPrice = 0;
+        for (OrderDetail orderDetail : orderDetailList) {
+             totalPrice += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
+        }
+        if (b == true) {
+            totalPrice = totalPrice - voucherRepository.findVoucherByCode(voucherDTO.getCode()).getPrice();
+        }
+        order.setTotalPrice(totalPrice);
         order.setOrderDetails(orderDetailList);
         orderRepository.save(order);
 
