@@ -21,5 +21,5 @@ public class Discount {
     private String discountName;
 
     @Column
-    private int discountPrice;
+    private Double discountPrice;
 }

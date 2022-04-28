@@ -58,6 +58,7 @@
                                onclick="showConfirmModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
                                class="btn btn-danger" style="color: white">Delete
                             </a>
+                            <a th:href="@{/admin/discounts/update/{id}(id = ${discount.discountId})}" class="btn btn-warning">Update</a>
                         </td>
                     </tr>
                     </tbody>

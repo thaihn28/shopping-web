@@ -1,8 +1,10 @@
 package com.example.shoppingweb.dto;
 
+import com.example.shoppingweb.model.Discount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
@@ -11,27 +13,30 @@ public class ProductDTO {
     private Long productId;
     private String name;
     private int price;
-    private double priceDiscount;
+
+//    @Nullable
+    private Double priceDiscount;
+
     private String description;
     private int quantity;
     private String imageName;
     private int categoryId;
-    private Long discountId;
+    private Discount discount;
 
-    public double getPriceDiscount() {
+    public Discount getDiscount() {
+        return discount;
+    }
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+
+    public Double getPriceDiscount() {
         return priceDiscount;
     }
 
-    public void setPriceDiscount(double priceDiscount) {
+    public void setPriceDiscount(Double priceDiscount) {
         this.priceDiscount = priceDiscount;
-    }
-
-    public Long getDiscountId() {
-        return discountId;
-    }
-
-    public void setDiscountId(Long discountId) {
-        this.discountId = discountId;
     }
 
     public Long getProductId() {

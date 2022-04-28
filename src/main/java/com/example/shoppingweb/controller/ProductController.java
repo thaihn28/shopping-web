@@ -115,14 +115,18 @@ public class ProductController {
                               RedirectAttributes ra
     ) throws IOException, UserNotFoundException {
         Product product = new Product();
-        Discount findDiscount = discountService.getDiscountByID(productDTO.getDiscountId());
         product.setProductId(productDTO.getProductId());
         product.setName(productDTO.getName());
         product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
-        product.setDiscount(discountService.getDiscountByID(productDTO.getDiscountId()));
+        product.setDiscount(productDTO.getDiscount());
         product.setPrice(productDTO.getPrice());
-        double calDiscount = Double.valueOf(findDiscount.getDiscountPrice()) / 100;
-        product.setDiscountPrice(productDTO.getPrice() - (calDiscount * productDTO.getPrice()));
+        if(productDTO.getDiscount() != null){
+            double calDiscount = Double.valueOf(productDTO.getDiscount().getDiscountPrice()) / 100;
+            product.setDiscountPrice(productDTO.getPrice() - (calDiscount * productDTO.getPrice()));
+        }else {
+            product.setDiscountPrice(null);
+        }
+
         product.setQuantity(productDTO.getQuantity());
         product.setDescription(productDTO.getDescription());
         String imageUUID;
@@ -163,9 +167,10 @@ public class ProductController {
             productDTO.setProductId(product.getProductId());
             productDTO.setName(product.getName());
             productDTO.setCategoryId(product.getCategory().getId());
-            productDTO.setDiscountId(product.getDiscount().getDiscountId());
+//            productDTO.setDiscountId(product.getDiscount().getDiscountId());
+            productDTO.setDiscount(product.getDiscount());
             productDTO.setPrice(product.getPrice());
-//            productDTO.setPriceDiscount(product.getDiscountPrice());
+            productDTO.setPriceDiscount(product.getDiscountPrice());
             productDTO.setQuantity(product.getQuantity());
             productDTO.setDescription(product.getDescription());
             productDTO.setImageName(product.getImageName());

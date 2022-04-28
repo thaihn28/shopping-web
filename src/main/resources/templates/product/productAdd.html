@@ -45,11 +45,15 @@
                     </div>
                     <div class="form-group">
                         <label for="discount">Select Discount</label>
-                        <select class="form-control" th:field="*{discountId}" id="discount" name="discount">
+                        <select class="form-control" th:field="*{discount}" id="discount" name="discount">
+                            <option th:value="null"
+                             th:text="None"
+                              ></option>
                             <option th:each="discount :${discounts}"
                                     th:value="${discount.discountId}"
                                     th:text="${discount.discountName}"
                             >
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">

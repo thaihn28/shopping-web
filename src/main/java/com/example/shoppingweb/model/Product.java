@@ -23,6 +23,7 @@ public class Product {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "discount_id")
     private Discount discount;
 
     @NotNull
@@ -33,7 +34,8 @@ public class Product {
     @Column
     private int price;
 
-    private double discountPrice;
+    @Column(nullable = true)
+    private Double discountPrice;
 
     @NotNull
     @Column

@@ -3,6 +3,7 @@ package com.example.shoppingweb.controller;
 import com.example.shoppingweb.model.Discount;
 import com.example.shoppingweb.model.Voucher;
 import com.example.shoppingweb.service.DiscountService;
+import com.example.shoppingweb.service.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,5 +45,18 @@ public class DiscountController {
         discountService.deleteDiscountByID(id);
         ra.addFlashAttribute("msg", "Deleted successfully");
         return "redirect:/admin/discounts";
+    }
+
+    @GetMapping("/discounts/update/{id}")
+    public String updateDiscount(@PathVariable(value = "id") Long id, Model model){
+        try {
+            Discount discount = discountService.getDiscountByID(id);
+            model.addAttribute("discount", discount);
+            model.addAttribute("pageTitle" , "Update discount (Id: " + id + ")" );
+            return "/discount/discountAdd";
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return "redirect:/admin/discounts";
+        }
     }
 }
