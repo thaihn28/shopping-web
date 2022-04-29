@@ -5,6 +5,7 @@ import com.example.shoppingweb.model.Product;
 import com.example.shoppingweb.service.CategoryService;
 import com.example.shoppingweb.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class CategoryAPI {
     @Autowired
     ProductService productService;
