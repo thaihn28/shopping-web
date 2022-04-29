@@ -55,7 +55,6 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/api/**") //mọi request có api sẽ vào đây trước
-                    .cors().and()
                     .csrf().disable()
                     .authorizeRequests().antMatchers("/api/auth/**", "/api/products/**", "/api/categories/**").permitAll()
                     //.antMatchers("**/test/**").permitAll()
