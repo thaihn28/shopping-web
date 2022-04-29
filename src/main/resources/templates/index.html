@@ -55,6 +55,28 @@
                     <!--/.info-box-->
                 </div>
 
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <a  th:href="@{/admin/vouchers}">
+                        <div class="info-box dark-bg">
+                            <i class="fa fa-money"></i>
+                            <div class="count" th:text="${vouchers.size()}"></div>
+                            <div class="title">Vouchers</div>
+                        </div>
+                    </a>
+                    <!--/.info-box-->
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <a  th:href="@{/admin/discounts}">
+                        <div class="info-box red-bg">
+                            <i class="fa fa-percent"></i>
+                            <div class="count" th:text="${discounts.size()}"></div>
+                            <div class="title">Discounts</div>
+                        </div>
+                    </a>
+                    <!--/.info-box-->
+                </div>
+
             </div>
         </section>
 <!--        <h1>hello</h1>-->

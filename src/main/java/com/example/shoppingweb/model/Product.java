@@ -1,13 +1,18 @@
 package com.example.shoppingweb.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,6 +34,9 @@ public class Product {
     @NotNull
     @Column
     private String name;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdDate;
 
     @NotNull
     @Column

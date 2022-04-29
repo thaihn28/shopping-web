@@ -4,6 +4,11 @@ import com.example.shoppingweb.model.Discount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Data
@@ -23,6 +28,17 @@ public class ProductDTO {
     private int categoryId;
     private Discount discount;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdDate;
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public Discount getDiscount() {
         return discount;
     }
@@ -31,13 +47,6 @@ public class ProductDTO {
     }
 
 
-    public Double getPriceDiscount() {
-        return priceDiscount;
-    }
-
-    public void setPriceDiscount(Double priceDiscount) {
-        this.priceDiscount = priceDiscount;
-    }
 
     public Long getProductId() {
         return productId;

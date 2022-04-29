@@ -44,6 +44,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Price</th>
+                        <th>Create At</th>
                         <th><i class="icon_cogs"></i> Action</th>
                     </tr>
 
@@ -51,7 +52,8 @@
                         <td th:text="${iStat.index + 1}"></td>
                         <td th:text="${discount.discountId}"></td>
                         <td th:text="${discount.discountName}"></td>
-                        <td th:text="${discount.discountPrice} + ' $'" ></td>
+                        <td th:text="${discount.discountPrice} + ' %'" ></td>
+                        <td th:text="${#temporals.format(discount.createdDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <a th:data-id="${discount.discountId}"
                                th:data-name="${discount.discountName}"

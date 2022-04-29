@@ -1,5 +1,6 @@
 package com.example.shoppingweb.controller;
 
+import com.example.shoppingweb.helper.FormatPriceHelper;
 import com.example.shoppingweb.model.Category;
 import com.example.shoppingweb.model.Product;
 import com.example.shoppingweb.model.Voucher;
@@ -70,6 +71,7 @@ public class VoucherController {
         try {
             Voucher voucher = voucherService.getVoucherByID(id);
             model.addAttribute("voucher", voucher);
+            model.addAttribute("formatter", FormatPriceHelper.getInstance().formatPrice(voucher.getPrice()));
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return "redirect:/admin/vouchers";

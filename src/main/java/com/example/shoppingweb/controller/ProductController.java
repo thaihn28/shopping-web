@@ -2,6 +2,7 @@ package com.example.shoppingweb.controller;
 
 
 import com.example.shoppingweb.dto.ProductDTO;
+import com.example.shoppingweb.helper.FormatPriceHelper;
 import com.example.shoppingweb.model.Category;
 import com.example.shoppingweb.model.Discount;
 import com.example.shoppingweb.model.Product;
@@ -22,6 +23,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -85,12 +89,19 @@ public class ProductController {
     // Product detail
     @GetMapping("/products/detail/{id}")
     public String detailProduct(@PathVariable(value = "id") Long id, Model model){
+//        DecimalFormat formatter = new DecimalFormat("###,###,###");
+
         try {
             Product product = productService.getProductById(id);
             List<Category> categoryList = categoryService.getAllCategory();
             model.addAttribute("product", product);
             model.addAttribute("categories", categoryList);
             model.addAttribute("discounts", discountService.getAllDiscounts());
+//            model.addAttribute("formatter", formatter);
+            model.addAttribute("formatPrice", FormatPriceHelper.getInstance().formatPrice(product.getPrice()));
+            if(product.getDiscount() != null){
+                model.addAttribute("formatDiscountPrice", FormatPriceHelper.getInstance().formatDiscountPrice(product.getDiscountPrice()));
+            }
             return "/product/productDetail";
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -103,6 +114,7 @@ public class ProductController {
         model.addAttribute("productDTO", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategory());
         model.addAttribute("discounts", discountService.getAllDiscounts());
+        model.addAttribute("dateNow", LocalDate.now());
         ra.addFlashAttribute("pageTitle", "Add a new product");
         return "/product/productAdd";
     }
@@ -119,6 +131,7 @@ public class ProductController {
         product.setName(productDTO.getName());
         product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()));
         product.setDiscount(productDTO.getDiscount());
+        product.setCreatedDate(productDTO.getCreatedDate());
         product.setPrice(productDTO.getPrice());
         if(productDTO.getDiscount() != null){
             double calDiscount = Double.valueOf(productDTO.getDiscount().getDiscountPrice()) / 100;
@@ -126,7 +139,6 @@ public class ProductController {
         }else {
             product.setDiscountPrice(null);
         }
-
         product.setQuantity(productDTO.getQuantity());
         product.setDescription(productDTO.getDescription());
         String imageUUID;
@@ -159,16 +171,15 @@ public class ProductController {
     }
 
     @GetMapping("products/update/{id}")
-    public String updateProductByID(@PathVariable(value = "id") Long id, Model model){
+    public String updateProductByID(@PathVariable(value = "id") Long id, Model model, RedirectAttributes ra){
         try {
             Product product = productService.getProductById(id);
-
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductId(product.getProductId());
             productDTO.setName(product.getName());
             productDTO.setCategoryId(product.getCategory().getId());
-//            productDTO.setDiscountId(product.getDiscount().getDiscountId());
             productDTO.setDiscount(product.getDiscount());
+            productDTO.setCreatedDate(product.getCreatedDate());
             productDTO.setPrice(product.getPrice());
             productDTO.setPriceDiscount(product.getDiscountPrice());
             productDTO.setQuantity(product.getQuantity());
